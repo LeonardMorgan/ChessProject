@@ -6,14 +6,11 @@
 #define UNTITLED2_LOGICCHESS_H
 
 #include <iostream>
+#include <vector>
+
 using namespace std;
 // tokenize chapter 6.5
 
-class Token {
-public:
-    int number;
-    char string;
-};
 
 class ChessToken {
 public:
@@ -59,13 +56,6 @@ ChessToken::ChessToken(string type, int id, char positionY,  int positionX) {
     this->posX       = positionX;  // cannot be changed from outside without calling the function
     this->posY       = positionY;
 }
-
-enum pieces {
-    rook    = 'r',
-    pawn    = 'p',
-    bigshop = 'b',
-    queen   = 'q',
-};
 
 vector<ChessToken> P1Pieces;
 vector<ChessToken> P2Pieces;

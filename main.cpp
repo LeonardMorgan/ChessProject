@@ -9,11 +9,11 @@ void createPieces();
 bool isValidName(const string &);
 bool isValidPosition(string);
 void beginGame();
-void setPosition(ChessToken pieceType, string nextPos);
-ChessToken getPiece(string, int posX, char PosY);
-vector<ChessToken> playerPieces;
+void setPosition(ChessToken *pieceType, string nextPos);
+ChessToken* getPiece(string, int posX, char PosY);
+ChessToken* playerPieces;
 bool player1 = true;
-void getPlayerTurn(vector<ChessToken>&);
+void getPlayerTurn();
 
 int main() {
     beginGame();
@@ -21,7 +21,7 @@ int main() {
 }
 
 bool isValidPosition(string Pos) {
-    for (size_t i = 0 ; i < playerPieces.size(); i++) {
+    for (size_t i = 0 ; i < 16; i++) {
         if (playerPieces[i].getPositionY() == Pos[0] and
             playerPieces[i].getPositionX() == (int) Pos[1] - '0') {
             cout << "found at position " << i << " of player side " << playerPieces[i].playerSide << "\n";
@@ -55,11 +55,11 @@ bool isValidName(const string &Piece) {
 }
 
 void beginGame() {
-    ChessToken playerTurn;
+    ChessToken *playerTurn;
     string pieceType, posInitial, posFinal, to;
     createPieces();
     player1 = true;
-    getPlayerTurn(playerPieces);
+    getPlayerTurn();
 
     cout << "\nPlease enter a piece, a position initial and position final \n"
          << "Example: rook a1 to b2: \n";
@@ -74,10 +74,10 @@ void beginGame() {
             if (isValidName(pieceType)) {
                 playerTurn = getPiece(pieceType, (int) posInitial[1] - '0', posInitial[0]);
 
-                if (playerTurn.kind != "Empty") {
-                    cout << playerTurn.kind << " "
-                         << playerTurn.getPositionY()
-                         << playerTurn.getPositionX()
+                if (playerTurn->kind != "Empty") {
+                    cout << playerTurn->kind << " "
+                         << playerTurn->getPositionY()
+                         << playerTurn->getPositionX()
                          << "\n";
 
                     setPosition(playerTurn, posFinal);
@@ -96,22 +96,23 @@ void beginGame() {
              << "Example: rook a1 to b2: \n";
     }
     cout << "Game over \n ";
+    delete playerTurn;
 }
 
-ChessToken getPiece(string userInput, int posX, char posY) {
+ChessToken* getPiece(string userInput, int posX, char posY) {
     ChessToken TempChessPiece;
-    for (size_t i = 0 ; i < playerPieces.size(); i++) {
+    for (size_t i = 0 ; i < 16; i++) {
       if (playerPieces[i].kind == userInput) {
         if (playerPieces[i].getPositionX() == posX and
             playerPieces[i].getPositionY() == posY) {
                 cout << playerPieces[i].kind << " piece found at position vector[" << i << "] on Player "
                      << playerPieces[i].getPositionX() << playerPieces[i].getPositionY() << " player "
                      << playerPieces[i].playerSide << " vector \n";
-                return playerPieces[i];
+                return &playerPieces[i];
         }
       }
     }
-    return TempChessPiece;
+    return &TempChessPiece;
 }
 
 void createPieces() {
@@ -168,26 +169,27 @@ void createPieces() {
     cout << "\n" << endl;
 }
 
-void setPosition(ChessToken pieceType, string nextPos) {
-    pieceType.setPositionY(nextPos[0]);
-    pieceType.setPositionX((int)nextPos[1] - '0');
+void setPosition(ChessToken *pieceType, string nextPos) {
+    pieceType->setPositionY(nextPos[0]);
+    pieceType->setPositionX((int)nextPos[1] - '0');
 
-    cout << pieceType.kind << " Changed Position to "
-         << pieceType.getPositionY()
-         << pieceType.getPositionX()
+    cout << pieceType->kind << " Changed Position to "
+         << pieceType->getPositionY()
+         << pieceType->getPositionX()
          << "\n"
          << endl;
-    getPlayerTurn(playerPieces);
+
+    getPlayerTurn();
 }
 
-void getPlayerTurn(vector<ChessToken>& playerPieces) {
+void getPlayerTurn() {
     if(player1) {
         cout << "Player 1 turn  ";
-        playerPieces = P1Pieces;
+        playerPieces = P1Pieces.data();
         player1 = false;
     } else { // player 2
         cout << "Player 2 turn  ";
-        playerPieces = P2Pieces;
+        playerPieces = P2Pieces.data();
         player1 = true;
     }
 }
