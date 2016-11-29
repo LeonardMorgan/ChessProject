@@ -14,6 +14,14 @@ using namespace std;
 
 class ChessToken {
 public:
+    ChessToken();
+    ~ ChessToken();
+
+    ChessToken *getThisPiece() {
+        ChessToken *Chess = this;
+        return Chess;
+    }
+
     int playerSide;
     string kind;
 
@@ -25,9 +33,6 @@ public:
 
     ChessToken(string, int, char, int);
 
-    ChessToken(const string &type_ = "Empty") : kind(type_) {
-        cout << "Piece " << type_ << " created." << endl;
-    }
 
 private:
     int posX;  // cannot be changed from outside without calling the function
@@ -55,6 +60,14 @@ ChessToken::ChessToken(string type, int id, char positionY,  int positionX) {
     this->playerSide = id;
     this->posX       = positionX;  // cannot be changed from outside without calling the function
     this->posY       = positionY;
+}
+
+ChessToken::ChessToken(void) {
+    cout << "Object is being created" << endl;
+}
+
+ChessToken::~ChessToken(void) {
+    cout << "Object is being deleted" << endl;
 }
 
 vector<ChessToken> P1Pieces;
